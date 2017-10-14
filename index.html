@@ -239,6 +239,12 @@
                   <li>
                     <a href="#responding-to-an-event" class="toc-h2 toc-link" data-title="The Basics">Responding to an Event</a>
                   </li>
+                  <li>
+                    <a href="#a-more-complicated-trigger" class="toc-h2 toc-link" data-title="The Basics">A more complicated Trigger</a>
+                  </li>
+                  <li>
+                    <a href="#canceling-events" class="toc-h2 toc-link" data-title="The Basics">Canceling events</a>
+                  </li>
               </ul>
           </li>
           <li>
@@ -311,6 +317,48 @@ and many other things. </p>
 
 <p>The best way to interact with Minecraft&#39;s chat is via the <code>ChatLib</code> class. It is accessed very simply through the
 variable ChatLib. A list of the methods it provides can be found in the documentation <a href="http://ct.kerbybit.com/ct.js/com/chattriggers/ctjs/libs/ChatLib.html">here</a>.</p>
+<h2 id='a-more-complicated-trigger'>A more complicated Trigger</h2>
+<blockquote>
+<p>A chat trigger that gets fired on the chat message <code>&lt;FalseHonesty&gt; Hello World!</code></p>
+</blockquote>
+<pre class="highlight javascript tab-javascript"><code><span class="nx">TriggerRegister</span><span class="p">.</span><span class="nx">registerChat</span><span class="p">(</span><span class="s2">"exampleImportChat"</span><span class="p">).</span><span class="nx">setChatCriteria</span><span class="p">(</span><span class="s2">"&lt;${*}&gt; ${message}"</span><span class="p">);</span>
+
+<span class="kd">function</span> <span class="nx">exampleImportChat</span><span class="p">(</span><span class="nx">message</span><span class="p">)</span> <span class="p">{</span>
+
+<span class="p">}</span>
+</code></pre>
+<p>This function receives chat messages based on a certain criteria. If a received chat message follows the pattern
+put in <code>.setChatCriteria()</code>, then the function will be called. <code>${variableName}</code> creates a variable in the criteria, and when the event
+is fired, its value is passed into the function.</p>
+
+<p><code>TriggerRegister.registerChat()</code> and <code>.setChatCriteria()</code> return the created trigger, so you can chain configuration methods.
+A list of these are found in the documentation for each specific trigger type, you can find the available modifications
+<a href="http://ct.kerbybit.com/ct.js/com/chattriggers/ctjs/triggers/TriggerRegister.html#registerChat-java.lang.String-">here</a>.</p>
+
+<aside class="notice"><code>${*}</code> creates a variable that isn't passed into the function</aside>
+<h2 id='canceling-events'>Canceling events</h2>
+<blockquote>
+<p>To cancel a cancelable event, do this:</p>
+</blockquote>
+<pre class="highlight javascript tab-javascript"><code><span class="nx">TriggerRegister</span><span class="p">.</span><span class="nx">registerChat</span><span class="p">(</span><span class="s2">"exampleImportChat"</span><span class="p">).</span><span class="nx">setChatCriteria</span><span class="p">(</span><span class="s2">"&lt;${*}&gt; ${message}"</span><span class="p">);</span>
+
+<span class="kd">function</span> <span class="nx">exampleImportChat</span><span class="p">(</span><span class="nx">message</span><span class="p">,</span> <span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">event</span><span class="p">.</span><span class="nx">setCanceled</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+
+  <span class="nx">ChatLib</span><span class="p">.</span><span class="nx">chat</span><span class="p">(</span><span class="s2">"I did cancel this: "</span> <span class="o">+</span> <span class="nx">message</span> <span class="o">+</span> <span class="s2">"!"</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre>
+<blockquote>
+<p>The event parameter is optional, so this works just the same if you don&#39;t need to use the event</p>
+</blockquote>
+<pre class="highlight javascript tab-javascript"><code><span class="nx">TriggerRegister</span><span class="p">.</span><span class="nx">registerChat</span><span class="p">(</span><span class="s2">"exampleImportChat"</span><span class="p">).</span><span class="nx">setChatCriteria</span><span class="p">(</span><span class="s2">"&lt;${*}&gt; ${message}"</span><span class="p">);</span>
+
+<span class="kd">function</span> <span class="nx">exampleImportChat</span><span class="p">(</span><span class="nx">message</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">ChatLib</span><span class="p">.</span><span class="nx">chat</span><span class="p">(</span><span class="s2">"I didn't cancel this: "</span> <span class="o">+</span> <span class="nx">message</span> <span class="o">+</span> <span class="s2">"!"</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre>
+<p>Some events are cancelable, like chat events. If it is cancelable, the last parameter passed into the function will always
+be the event</p>
 <h1 id='triggers'>Triggers</h1>
 <p>This is a list of all the Triggers currently available:</p>
 
@@ -318,35 +366,43 @@ variable ChatLib. A list of the methods it provides can be found in the document
 <tr>
 <th>Trigger</th>
 <th>Explanation</th>
+<th>Cancelable</th>
 </tr>
 </thead><tbody>
 <tr>
 <td>Chat</td>
 <td>Fires when a chat event is received</td>
+<td>true</td>
 </tr>
 <tr>
 <td>RenderOverlay</td>
 <td>Fires when the game&#39;s overlay is rendered, tied to the game&#39;s FPS</td>
+<td>false</td>
 </tr>
 <tr>
 <td>SoundPlay</td>
 <td>Fired when a sound is played</td>
+<td>false</td>
 </tr>
 <tr>
 <td>Step</td>
-<td>Fired a certain amount of times per second, no matter the FPS.</td>
+<td>Fired a certain amount of times per second, no matter the FPS</td>
+<td>false</td>
 </tr>
 <tr>
 <td>Tick</td>
 <td>Fired every time the Minecraft game loop is ran</td>
+<td>false</td>
 </tr>
 <tr>
 <td>WorldLoad</td>
 <td>Fired when the game loads a world</td>
+<td>false</td>
 </tr>
 <tr>
 <td>WorldUnload</td>
 <td>Fired when the game unloads a world</td>
+<td>false</td>
 </tr>
 </tbody></table>
 
