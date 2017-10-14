@@ -248,6 +248,23 @@
               </ul>
           </li>
           <li>
+            <a href="#rendering" class="toc-h1 toc-link" data-title="Rendering">Rendering</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#setting-up" class="toc-h2 toc-link" data-title="Rendering">Setting up</a>
+                  </li>
+                  <li>
+                    <a href="#setting-priority" class="toc-h2 toc-link" data-title="Rendering">Setting priority</a>
+                  </li>
+                  <li>
+                    <a href="#simple-text-rendering" class="toc-h2 toc-link" data-title="Rendering">Simple text rendering</a>
+                  </li>
+                  <li>
+                    <a href="#rendering-of-shapes" class="toc-h2 toc-link" data-title="Rendering">Rendering of shapes</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
             <a href="#triggers" class="toc-h1 toc-link" data-title="Triggers">Triggers</a>
           </li>
       </div>
@@ -297,7 +314,11 @@ like a sound is played, or chat message is received. A full list of these is at 
 
 <p>What we&#39;re doing here is calling a method in the &quot;TriggerRegister&quot; class that registers &quot;exampleImportWorldLoad&quot; as a trigger
 to be activated when the world is loaded. However, there is no function with that name yet!</p>
-<h2 id='receiving-the-event'>Receiving the Event</h2><pre class="highlight javascript tab-javascript"><code><span class="nx">TriggerRegister</span><span class="p">.</span><span class="nx">registerWorldLoad</span><span class="p">(</span><span class="s2">"exampleImportWorldLoad"</span><span class="p">);</span>
+<h2 id='receiving-the-event'>Receiving the Event</h2>
+<blockquote>
+<p>We create the function to be called by the trigger like so:</p>
+</blockquote>
+<pre class="highlight javascript tab-javascript"><code><span class="nx">TriggerRegister</span><span class="p">.</span><span class="nx">registerWorldLoad</span><span class="p">(</span><span class="s2">"exampleImportWorldLoad"</span><span class="p">);</span>
 
 <span class="kd">function</span> <span class="nx">exampleImportWorldLoad</span><span class="p">()</span> <span class="p">{</span>
 
@@ -307,7 +328,11 @@ to be activated when the world is loaded. However, there is no function with tha
 and many other things. </p>
 
 <aside class="notice">Multiple triggers can refer to one function.</aside>
-<h2 id='responding-to-an-event'>Responding to an Event</h2><pre class="highlight javascript tab-javascript"><code><span class="nx">TriggerRegister</span><span class="p">.</span><span class="nx">registerWorldLoad</span><span class="p">(</span><span class="s2">"exampleImportWorldLoad"</span><span class="p">);</span>
+<h2 id='responding-to-an-event'>Responding to an Event</h2>
+<blockquote>
+<p>For code to be activated by a trigger, simply put it in your function called by that registered trigger</p>
+</blockquote>
+<pre class="highlight javascript tab-javascript"><code><span class="nx">TriggerRegister</span><span class="p">.</span><span class="nx">registerWorldLoad</span><span class="p">(</span><span class="s2">"exampleImportWorldLoad"</span><span class="p">);</span>
 
 <span class="kd">function</span> <span class="nx">exampleImportWorldLoad</span><span class="p">()</span> <span class="p">{</span>
   <span class="nx">ChatLib</span><span class="p">.</span><span class="nx">chat</span><span class="p">(</span><span class="s2">"&amp;6Gold Text says that the world has just loaded!"</span><span class="p">);</span>
@@ -359,6 +384,85 @@ A list of these are found in the documentation for each specific trigger type, y
 </code></pre>
 <p>Some events are cancelable, like chat events. If it is cancelable, the last parameter passed into the function will always
 be the event</p>
+<h1 id='rendering'>Rendering</h1>
+<aside class="notice">All rendering coordinates start at the top left of the screen!</aside>
+<h2 id='setting-up'>Setting up</h2>
+<blockquote>
+<p>Function to be ran everytime the game overlay is rendered</p>
+</blockquote>
+<pre class="highlight javascript tab-javascript"><code><span class="nx">TriggerRegister</span><span class="p">.</span><span class="nx">registerRenderOverlay</span><span class="p">(</span><span class="s2">"exampleImportRenderOverlay"</span><span class="p">);</span>
+
+<span class="kd">function</span> <span class="nx">exampleImportRenderOverlay</span><span class="p">()</span> <span class="p">{</span>
+
+<span class="p">}</span>
+</code></pre>
+<p>Rendering has to be done every frame of the game, otherwise it will only be on the screen for one frame.
+The RenderOverlay Trigger is called every frame of the game, so it is required for rendering. All of the actual
+rendering code will go inside this function, although it could be seperated into seperate ones.</p>
+<h2 id='setting-priority'>Setting priority</h2>
+<blockquote>
+<p>It is possible to set a certain trigger&#39;s priority like so:</p>
+</blockquote>
+<pre class="highlight javascript tab-javascript"><code><span class="nx">TriggerRegister</span><span class="p">.</span><span class="nx">registerRenderOverlay</span><span class="p">(</span><span class="s2">"exampleImportRenderOverlayLast"</span><span class="p">).</span><span class="nx">setPriority</span><span class="p">(</span><span class="nx">Priority</span><span class="p">.</span><span class="nx">LOWEST</span><span class="p">);</span>
+<span class="nx">TriggerRegister</span><span class="p">.</span><span class="nx">registerRenderOverlay</span><span class="p">(</span><span class="s2">"exampleImportRenderOverlayFirst"</span><span class="p">).</span><span class="nx">setPriority</span><span class="p">(</span><span class="nx">Priority</span><span class="p">.</span><span class="nx">HIGHEST</span><span class="p">);</span>
+
+<span class="kd">function</span> <span class="nx">exampleImportRenderOverlayLast</span><span class="p">()</span> <span class="p">{</span>
+
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">exampleImportRenderOverlayFirst</span><span class="p">()</span> <span class="p">{</span>
+
+<span class="p">}</span>
+</code></pre>
+<p>Here, were are dealing with the priority of triggers. Priorities are <code>LOWEST, LOW, NORMAL, HIGH, HIGHEST</code>.
+Triggers with a priority of HIGHEST are ran first, because they have first say on an event. Triggers with a priority of LOWEST
+then, are ran last.</p>
+
+<aside class="notice">All trigger types can have a priority set, it's just most commonly used in rendering</aside>
+<h2 id='simple-text-rendering'>Simple text rendering</h2>
+<blockquote>
+<p>You can render text onto the screen with this code:</p>
+</blockquote>
+<pre class="highlight javascript tab-javascript"><code><span class="nx">TriggerRegister</span><span class="p">.</span><span class="nx">registerRenderOverlay</span><span class="p">(</span><span class="s2">"exampleImportRenderOverlay"</span><span class="p">);</span>
+
+<span class="kd">function</span> <span class="nx">exampleImportRenderOverlay</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">RenderLib</span><span class="p">.</span><span class="nx">drawString</span><span class="p">(</span><span class="s2">"Hello World!"</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="nx">RenderLib</span><span class="p">.</span><span class="nx">color</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">));</span>
+<span class="p">}</span>
+</code></pre>
+<p>Every frame, the code inside <code>exampleImportRenderOverlay</code> is called. Inside of this function, we make one call
+to <code>RenderLib.drawString(text, screenX, screenY, color)</code>. We make the text say &quot;Hello World!&quot;, and place it on the screen
+at 10, 10 (the top left corner).</p>
+
+<p>The other interesting part to take a look at is the 4th argument, which is the color of the
+text. For the color, we make a call to <code>RenderLib.color(red, green, blue, alpha)</code>. In this example, the text will be white.</p>
+
+<aside class="warning">If all you are rendering is text, it is preferable to use Display objects, covered later.</aside>
+<h2 id='rendering-of-shapes'>Rendering of shapes</h2>
+<blockquote>
+<p>This example renders a rectangle, circle, and triangle</p>
+</blockquote>
+<pre class="highlight javascript tab-javascript"><code><span class="nx">TriggerRegister</span><span class="p">.</span><span class="nx">registerRenderOverlay</span><span class="p">(</span><span class="s2">"exampleImportRenderOverlay"</span><span class="p">);</span>
+
+<span class="kd">function</span> <span class="nx">exampleImportRenderOverlay</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">white</span> <span class="o">=</span> <span class="nx">RenderLib</span><span class="p">.</span><span class="nx">color</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">);</span>
+
+  <span class="nx">RenderLib</span><span class="p">.</span><span class="nx">drawRectangle</span><span class="p">(</span><span class="nx">white</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">);</span>
+  <span class="nx">RenderLib</span><span class="p">.</span><span class="nx">drawShape</span><span class="p">(</span><span class="nx">white</span><span class="p">,</span> <span class="mi">360</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">25</span><span class="p">);</span>
+  <span class="nx">RenderLib</span><span class="p">.</span><span class="nx">drawPolygon</span><span class="p">(</span><span class="nx">white</span><span class="p">,</span> <span class="p">[</span><span class="mi">300</span><span class="p">,</span> <span class="mi">300</span><span class="p">],</span> <span class="p">[</span><span class="mi">400</span><span class="p">,</span> <span class="mi">400</span><span class="p">],</span> <span class="p">[</span><span class="mi">200</span><span class="p">,</span> <span class="mi">400</span><span class="p">]);</span>
+<span class="p">}</span>
+</code></pre>
+<p>In our rendering function we are now drawing a bunch of shapes with a bunch of different methods.
+The first line is simply a variable keeping the color white so we don&#39;t have to repeat ourselves so much.</p>
+
+<p>The first actual rendering line is the call to <code>RenderLib.drawRectangle(color, screenX, screenY, width, height);</code>.
+In this example, its a simple 50x50 square, starting at (10,10) on the player&#39;s screen.</p>
+
+<p>The second line that does rendering calls the <code>RenderLib.drawShape(color, segments, screenX, screenY, radius);</code> method.
+This one draws a perfect shape with that number of segments. 3 would draw a perfect triangle, 5 a pentagon. This could be 
+used instead of the next line to draw a triangle, or the line before for a square. For this example, it draws a circle.</p>
+
+<p>The last line makes use of the <code>RenderLib.drawPolygon(color, [x, y]...);</code> method. It can take as many arrays with x,y
+coordinates as you pass it to add more and more points. This example is used to make a triangle.</p>
 <h1 id='triggers'>Triggers</h1>
 <p>This is a list of all the Triggers currently available:</p>
 
