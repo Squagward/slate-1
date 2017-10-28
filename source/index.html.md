@@ -13,6 +13,7 @@ includes:
 - chatlib
 - rendering
 - objects
+- minecraftvars
 - triggers
 
 search: true
