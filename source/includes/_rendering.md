@@ -4,6 +4,12 @@ Rendering is where modules can draw most anything on to the game screen. All 2D 
 calling methods in the `Renderer` object. 3D rendering involves calling methods in the
 [`Tessellator`](#tessellator) object.
 
+<aside class="success">
+  If you want to create much more customizable rendering options, the
+  <a href="https://chattriggers.com/modules/v/Elementa">Elementa module</a>
+  is highly encouraged.
+</aside>
+
 <aside class="notice">All 2D rendering coordinates start at the top left of the screen. X increases from left to right, and Y increases from top to bottom.</aside>
 
 ## Setting up
@@ -18,7 +24,7 @@ function myRenderOverlay() {
 }
 ```
 
-Rendering has to be done every frame of the game, otherwise it will only be on the screen for one frame. There are many different render triggers, and they all start with `Render`. The most common render trigger is RenderOverlay: this trigger fires every frame with no conditions.
+Rendering has to be done every frame of the game, otherwise it will only be on the screen for one frame and . There are many different render triggers, and they all start with `Render`. The most common render trigger is RenderOverlay: this trigger fires every frame with no conditions.
 
 ## Setting priority
 
@@ -239,10 +245,12 @@ We use this because otherwise the animation would be jittery because there are f
 If we wanted to make the example from above not be jittery, we would use partial ticks.
 
 ```js
+const myPlayerMP = new PlayerMP(Player.getPlayer());
+
 function myWorldRender(partialTicks) {
-  const lastX = new Entity(Player.getPlayer()).getLastX();
-  const lastY = new Entity(Player.getPlayer()).getLastY();
-  const lastZ = new Entity(Player.getPlayer()).getLastZ();
+  const lastX = myPlayerMP.getLastX();
+  const lastY = myPlayerMP.getLastY();
+  const lastZ = myPlayerMP.getLastZ();
 
   const currentX = Player.getX();
   const currentY = Player.getY();

@@ -129,8 +129,9 @@ display.addLine(new DisplayLine("2 line gap above me!"));
 
 `Displays` consist of lines of text. These lines can be added and set, and they can use color codes. The first call to
 `.addLine(message)` adds a line to the display with the text passed in. The second call to `.addLines(messages...)` adds
-as many lines as you pass into it, in our case just 2. The final call to `.addLines(number)` adds as many lines as
-you pass in, this is used for setting lines later that you don't want to say anything yet.
+as many lines as you pass into it, in our case just 2. If you don't pass in Strings or `DisplayLines`, then it will just add one
+line per parameter you passed (e.g `.addLines(2)` will only add 1 empty line despite the number, but `.addLines(0, 0)`
+will add 2 empty lines due to there being 2 parameters).
 
 ## Setting content
 
@@ -154,10 +155,11 @@ display.setAlign("left");
 
 This aligns your display on the left side of the screen. Other options are `"center"` and `"right"`.
 
-> This is how you set the order of the lines
+> This is how you set the order of the lines. Both of these ways will work, setting the order to go down.
 
 ```js
 display.setOrder("down");
+display.setOrder(DisplayHandler.Order.DOWN);
 ```
 
 This renders the lines from 0 going downwards, usually what you'd want. The other option is `"up"`.
@@ -181,10 +183,11 @@ display.setBackgroundColor(Renderer.AQUA);
 This makes the background color of the display aqua. Other options are all the colors in Renderer, or a custom color
 with `Renderer.color(r, g, b, a)`.
 
-> This sets the type of background for the display
+> This sets the type of background for the display to be fit per line. Both of these options will work.
 
 ```js
 display.setBackground(DisplayHandler.Background.PER_LINE);
+display.setBackground("per line");
 ```
 
 This option sets how the background color should be displayed. `PER_LINE` says that the background should be the width
@@ -287,11 +290,15 @@ mouse was clicked.
 gui.open();
 ```
 
+This opens the gui...
+
 > To close the gui, use this
 
 ```js
 gui.close();
 ```
+
+...and this closes the gui.
 
 These very simple methods open and close the gui, and neither take any arguments.
 
@@ -333,27 +340,14 @@ if a player pressed a key inside your Gui</aside>
 > This is the preferred method to get a keybind
 
 ```js
-const wKeyBind = getKeyBindFromKey(Keyboard.KEY_W, "My W Key");
-
-function getKeyBindFromKey(key, description) {
-  let mcKeyBind = Client.getKeyBindFromKey(key);
-
-  if (mcKeyBind == null || mcKeyBind == undefined) {
-    mcKeyBind = new KeyBind(description, key);
-  }
-
-  return mcKeyBind;
-}
+const wKeyBind = Client.getKeyBindFromKey(Keyboard.KEY_W, "My W Key");
 ```
 
-Let's break this down. First, we call the function `getKeyBindFromKey` and save the result in a variable. This result
-is our finished `KeyBind`. We pass into this function a keyCode, from the [Keyboard](http://legacy.lwjgl.org/javadoc/org/lwjgl/input/Keyboard.html) class.
+Let's break this down. We call the function `Client.getKeyBindFromKey` and save the result in a variable.
+This will result in trying to find an existing Minecraft keybinding in order to try not to override it. If there
+isn't one being used, it will create a new `KeyBind`, with the description and key we specified. We pass into this a keyCode from the [Keyboard](http://legacy.lwjgl.org/javadoc/org/lwjgl/input/Keyboard.html) class.
 
-Next, we have our function. First, it tries to get the `Keybind` for our specified key from `Client`. We do this
-because if we want a keybind Minecraft already uses, we don't want to override it. However, if Minecraft isn't using
-that key (because the function returned null), we need to make our own, with the description and key we specified.
-
-In our case, this will return the keybind already used by minecraft for the run key (unless of course you changed yours
+In our case, this will return the keybind already used by Minecraft for the run key (unless of course you changed yours
 to a different key).
 
 ## Using the keybind
@@ -377,7 +371,7 @@ if (wKeyBind.isPressed()) {
 This first example would spam your chat if it was in an Tick trigger or something of the like, as it will always be true
 if you are holding down the key.
 
-Now, in the second example, we would only get the chat message once every time we press and hold the key. It only
+Now, in the second example, we would only get the chat message only once every time we press and hold the key. It only
 returns true one time per key press. If you let go and press again, it will return true once more.
 
 # Player
@@ -422,9 +416,9 @@ In this case, we just made a display, and every tick it updates to show the play
 > The `LookingAt` object was replaced with the `Player.lookingAt()` method.
 
 This gets the current object that the player is looking at, whether that be a block or an entity. It returns
-either the `Block`, `Sign`, `Entity` class, or an air block when not looking at anything.
+either the `Block`, `Sign`, `Entity` class, or an air `Block` when not looking at anything.
 
-## Health
+## Health and Various Stats
 
 > You can not only get the player's health, hunger, active potion effects, but much more! Here's just a few
 > examples of how to get each part.

@@ -85,8 +85,8 @@ important fields, documented here:
 - `requires`: An array of names of other modules that your module depends on.
   These modules are guaranteed to be loaded before your module, allowing you to
   use them directly.
-- `asmEntry` and `asmExposedFunctions`: These will be discussed later in the ASM
-  section
+- `asmEntry` and `asmExposedFunctions`: The ChatTriggers wiki goes into detail about ASM
+[here](https://github.com/ChatTriggers/ChatTriggers/wiki/ASM-Injection)
 
 ## Scripting
 
@@ -122,7 +122,7 @@ register("worldLoad", () => {
 });
 ```
 
-In ctjs, "triggers" are events that get fired
+In ChatTriggers, "triggers" are events that get fired
 when a certain action happens in game, like a sound being played or a chat
 message being sent. Let's start with one of the simplest triggers: WorldLoad. In
 order to register a trigger, we use the provided `register` function. It takes
