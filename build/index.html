@@ -499,7 +499,7 @@
                     <a href="#lookingat" class="toc-h2 toc-link" data-title="LookingAt">LookingAt</a>
                   </li>
                   <li>
-                    <a href="#health" class="toc-h2 toc-link" data-title="Health">Health</a>
+                    <a href="#health-and-various-stats" class="toc-h2 toc-link" data-title="Health and Various Stats">Health and Various Stats</a>
                   </li>
                   <li>
                     <a href="#armor" class="toc-h2 toc-link" data-title="Armor">Armor</a>
@@ -577,8 +577,8 @@ If all your module provides is a library that other modules can use, this is not
 <li><code>requires</code>: An array of names of other modules that your module depends on.
 These modules are guaranteed to be loaded before your module, allowing you to
 use them directly.</li>
-<li><code>asmEntry</code> and <code>asmExposedFunctions</code>: These will be discussed later in the ASM
-section</li>
+<li><code>asmEntry</code> and <code>asmExposedFunctions</code>: The ChatTriggers wiki goes into detail about ASM
+<a href="https://github.com/ChatTriggers/ChatTriggers/wiki/ASM-Injection">here</a></li>
 </ul>
 <h2 id='scripting'>Scripting</h2>
 <p>We now need to create our script files. Typically, the root file of your module
@@ -607,7 +607,7 @@ directly from the files themselves.</p>
 
 <span class="p">});</span>
 </code></pre></div>
-<p>In ctjs, &quot;triggers&quot; are events that get fired
+<p>In ChatTriggers, &quot;triggers&quot; are events that get fired
 when a certain action happens in game, like a sound being played or a chat
 message being sent. Let&#39;s start with one of the simplest triggers: WorldLoad. In
 order to register a trigger, we use the provided <code>register</code> function. It takes
@@ -818,6 +818,12 @@ string, there will be a gap at the end where another use of the string will not 
 calling methods in the <code>Renderer</code> object. 3D rendering involves calling methods in the
 <a href="#tessellator"><code>Tessellator</code></a> object.</p>
 
+<aside class="success">
+  If you want to create much more customizable rendering options, the
+  <a href="https://chattriggers.com/modules/v/Elementa">Elementa module</a>
+  is highly encouraged.
+</aside>
+
 <aside class="notice">All 2D rendering coordinates start at the top left of the screen. X increases from left to right, and Y increases from top to bottom.</aside>
 <h2 id='setting-up'>Setting up</h2>
 <blockquote>
@@ -829,7 +835,7 @@ calling methods in the <code>Renderer</code> object. 3D rendering involves calli
 
 <span class="p">}</span>
 </code></pre></div>
-<p>Rendering has to be done every frame of the game, otherwise it will only be on the screen for one frame. There are many different render triggers, and they all start with <code>Render</code>. The most common render trigger is RenderOverlay: this trigger fires every frame with no conditions.</p>
+<p>Rendering has to be done every frame of the game, otherwise it will only be on the screen for one frame and . There are many different render triggers, and they all start with <code>Render</code>. The most common render trigger is RenderOverlay: this trigger fires every frame with no conditions.</p>
 <h2 id='setting-priority'>Setting priority</h2>
 <blockquote>
 <p>It is possible to set a certain trigger&#39;s priority like so</p>
@@ -1013,10 +1019,12 @@ useful in rendering, as the rest of the game runs on the tick system, but render
 We use this because otherwise the animation would be jittery because there are fewer ticks per second than frames per second.</p>
 
 <p>If we wanted to make the example from above not be jittery, we would use partial ticks.</p>
-<div class="highlight"><pre class="highlight javascript"><code><span class="kd">function</span> <span class="nx">myWorldRender</span><span class="p">(</span><span class="nx">partialTicks</span><span class="p">)</span> <span class="p">{</span>
-  <span class="kd">const</span> <span class="nx">lastX</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Entity</span><span class="p">(</span><span class="nx">Player</span><span class="p">.</span><span class="nx">getPlayer</span><span class="p">()).</span><span class="nx">getLastX</span><span class="p">();</span>
-  <span class="kd">const</span> <span class="nx">lastY</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Entity</span><span class="p">(</span><span class="nx">Player</span><span class="p">.</span><span class="nx">getPlayer</span><span class="p">()).</span><span class="nx">getLastY</span><span class="p">();</span>
-  <span class="kd">const</span> <span class="nx">lastZ</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Entity</span><span class="p">(</span><span class="nx">Player</span><span class="p">.</span><span class="nx">getPlayer</span><span class="p">()).</span><span class="nx">getLastZ</span><span class="p">();</span>
+<div class="highlight"><pre class="highlight javascript"><code><span class="kd">const</span> <span class="nx">myPlayerMP</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">PlayerMP</span><span class="p">(</span><span class="nx">Player</span><span class="p">.</span><span class="nx">getPlayer</span><span class="p">());</span>
+
+<span class="kd">function</span> <span class="nx">myWorldRender</span><span class="p">(</span><span class="nx">partialTicks</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">lastX</span> <span class="o">=</span> <span class="nx">myPlayerMP</span><span class="p">.</span><span class="nx">getLastX</span><span class="p">();</span>
+  <span class="kd">const</span> <span class="nx">lastY</span> <span class="o">=</span> <span class="nx">myPlayerMP</span><span class="p">.</span><span class="nx">getLastY</span><span class="p">();</span>
+  <span class="kd">const</span> <span class="nx">lastZ</span> <span class="o">=</span> <span class="nx">myPlayerMP</span><span class="p">.</span><span class="nx">getLastZ</span><span class="p">();</span>
 
   <span class="kd">const</span> <span class="nx">currentX</span> <span class="o">=</span> <span class="nx">Player</span><span class="p">.</span><span class="nx">getX</span><span class="p">();</span>
   <span class="kd">const</span> <span class="nx">currentY</span> <span class="o">=</span> <span class="nx">Player</span><span class="p">.</span><span class="nx">getY</span><span class="p">();</span>
@@ -1173,8 +1181,9 @@ functions found in <a href="#rendering">the rendering section</a>, use custom re
 </code></pre></div>
 <p><code>Displays</code> consist of lines of text. These lines can be added and set, and they can use color codes. The first call to
 <code>.addLine(message)</code> adds a line to the display with the text passed in. The second call to <code>.addLines(messages...)</code> adds
-as many lines as you pass into it, in our case just 2. The final call to <code>.addLines(number)</code> adds as many lines as
-you pass in, this is used for setting lines later that you don&#39;t want to say anything yet.</p>
+as many lines as you pass into it, in our case just 2. If you don&#39;t pass in Strings or <code>DisplayLines</code>, then it will just add one
+line per parameter you passed (e.g <code>.addLines(2)</code> will only add 1 empty line despite the number, but <code>.addLines(0, 0)</code>
+will add 2 empty lines due to there being 2 parameters).</p>
 <h2 id='setting-content'>Setting content</h2>
 <blockquote>
 <p>This is how you set a line in a display</p>
@@ -1193,9 +1202,10 @@ current coordinates.</p>
 <p>This aligns your display on the left side of the screen. Other options are <code>&quot;center&quot;</code> and <code>&quot;right&quot;</code>.</p>
 
 <blockquote>
-<p>This is how you set the order of the lines</p>
+<p>This is how you set the order of the lines. Both of these ways will work, setting the order to go down.</p>
 </blockquote>
 <div class="highlight"><pre class="highlight javascript"><code><span class="nx">display</span><span class="p">.</span><span class="nx">setOrder</span><span class="p">(</span><span class="dl">"</span><span class="s2">down</span><span class="dl">"</span><span class="p">);</span>
+<span class="nx">display</span><span class="p">.</span><span class="nx">setOrder</span><span class="p">(</span><span class="nx">DisplayHandler</span><span class="p">.</span><span class="nx">Order</span><span class="p">.</span><span class="nx">DOWN</span><span class="p">);</span>
 </code></pre></div>
 <p>This renders the lines from 0 going downwards, usually what you&#39;d want. The other option is <code>&quot;up&quot;</code>.</p>
 
@@ -1215,9 +1225,10 @@ current coordinates.</p>
 with <code>Renderer.color(r, g, b, a)</code>.</p>
 
 <blockquote>
-<p>This sets the type of background for the display</p>
+<p>This sets the type of background for the display to be fit per line. Both of these options will work.</p>
 </blockquote>
 <div class="highlight"><pre class="highlight javascript"><code><span class="nx">display</span><span class="p">.</span><span class="nx">setBackground</span><span class="p">(</span><span class="nx">DisplayHandler</span><span class="p">.</span><span class="nx">Background</span><span class="p">.</span><span class="nx">PER_LINE</span><span class="p">);</span>
+<span class="nx">display</span><span class="p">.</span><span class="nx">setBackground</span><span class="p">(</span><span class="dl">"</span><span class="s2">per line</span><span class="dl">"</span><span class="p">);</span>
 </code></pre></div>
 <p>This option sets how the background color should be displayed. <code>PER_LINE</code> says that the background should be the width
 of each line. <code>NONE</code> would mean don&#39;t show background color, and <code>FULL</code> would indicate make the background color draw in
@@ -1300,11 +1311,15 @@ mouse was clicked.</p>
 </blockquote>
 <div class="highlight"><pre class="highlight javascript"><code><span class="nx">gui</span><span class="p">.</span><span class="nx">open</span><span class="p">();</span>
 </code></pre></div>
+<p>This opens the gui...</p>
+
 <blockquote>
 <p>To close the gui, use this</p>
 </blockquote>
 <div class="highlight"><pre class="highlight javascript"><code><span class="nx">gui</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
 </code></pre></div>
+<p>...and this closes the gui.</p>
+
 <p>These very simple methods open and close the gui, and neither take any arguments.</p>
 <h1 id='inventory'>Inventory</h1>
 <p>The Inventory object contains methods used for getting information about the user&#39;s inventory. It can be called
@@ -1334,26 +1349,13 @@ if a player pressed a key inside your Gui</aside>
 <blockquote>
 <p>This is the preferred method to get a keybind</p>
 </blockquote>
-<div class="highlight"><pre class="highlight javascript"><code><span class="kd">const</span> <span class="nx">wKeyBind</span> <span class="o">=</span> <span class="nx">getKeyBindFromKey</span><span class="p">(</span><span class="nx">Keyboard</span><span class="p">.</span><span class="nx">KEY_W</span><span class="p">,</span> <span class="dl">"</span><span class="s2">My W Key</span><span class="dl">"</span><span class="p">);</span>
-
-<span class="kd">function</span> <span class="nx">getKeyBindFromKey</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">description</span><span class="p">)</span> <span class="p">{</span>
-  <span class="kd">let</span> <span class="nx">mcKeyBind</span> <span class="o">=</span> <span class="nx">Client</span><span class="p">.</span><span class="nx">getKeyBindFromKey</span><span class="p">(</span><span class="nx">key</span><span class="p">);</span>
-
-  <span class="k">if</span> <span class="p">(</span><span class="nx">mcKeyBind</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">||</span> <span class="nx">mcKeyBind</span> <span class="o">==</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">mcKeyBind</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">KeyBind</span><span class="p">(</span><span class="nx">description</span><span class="p">,</span> <span class="nx">key</span><span class="p">);</span>
-  <span class="p">}</span>
-
-  <span class="k">return</span> <span class="nx">mcKeyBind</span><span class="p">;</span>
-<span class="p">}</span>
+<div class="highlight"><pre class="highlight javascript"><code><span class="kd">const</span> <span class="nx">wKeyBind</span> <span class="o">=</span> <span class="nx">Client</span><span class="p">.</span><span class="nx">getKeyBindFromKey</span><span class="p">(</span><span class="nx">Keyboard</span><span class="p">.</span><span class="nx">KEY_W</span><span class="p">,</span> <span class="dl">"</span><span class="s2">My W Key</span><span class="dl">"</span><span class="p">);</span>
 </code></pre></div>
-<p>Let&#39;s break this down. First, we call the function <code>getKeyBindFromKey</code> and save the result in a variable. This result
-is our finished <code>KeyBind</code>. We pass into this function a keyCode, from the <a href="http://legacy.lwjgl.org/javadoc/org/lwjgl/input/Keyboard.html">Keyboard</a> class.</p>
+<p>Let&#39;s break this down. We call the function <code>Client.getKeyBindFromKey</code> and save the result in a variable.
+This will result in trying to find an existing Minecraft keybinding in order to try not to override it. If there
+isn&#39;t one being used, it will create a new <code>KeyBind</code>, with the description and key we specified. We pass into this a keyCode from the <a href="http://legacy.lwjgl.org/javadoc/org/lwjgl/input/Keyboard.html">Keyboard</a> class.</p>
 
-<p>Next, we have our function. First, it tries to get the <code>Keybind</code> for our specified key from <code>Client</code>. We do this
-because if we want a keybind Minecraft already uses, we don&#39;t want to override it. However, if Minecraft isn&#39;t using
-that key (because the function returned null), we need to make our own, with the description and key we specified.</p>
-
-<p>In our case, this will return the keybind already used by minecraft for the run key (unless of course you changed yours
+<p>In our case, this will return the keybind already used by Minecraft for the run key (unless of course you changed yours
 to a different key).</p>
 <h2 id='using-the-keybind'>Using the keybind</h2>
 <blockquote>
@@ -1373,7 +1375,7 @@ to a different key).</p>
 <p>This first example would spam your chat if it was in an Tick trigger or something of the like, as it will always be true
 if you are holding down the key.</p>
 
-<p>Now, in the second example, we would only get the chat message once every time we press and hold the key. It only
+<p>Now, in the second example, we would only get the chat message only once every time we press and hold the key. It only
 returns true one time per key press. If you let go and press again, it will return true once more.</p>
 <h1 id='player'>Player</h1>
 <p>The <code>Player</code> object contains many methods used for retrieving information about the player.</p>
@@ -1409,8 +1411,8 @@ returns true one time per key press. If you let go and press again, it will retu
 </blockquote>
 
 <p>This gets the current object that the player is looking at, whether that be a block or an entity. It returns
-either the <code>Block</code>, <code>Sign</code>, <code>Entity</code> class, or an air block when not looking at anything.</p>
-<h2 id='health'>Health</h2>
+either the <code>Block</code>, <code>Sign</code>, <code>Entity</code> class, or an air <code>Block</code> when not looking at anything.</p>
+<h2 id='health-and-various-stats'>Health and Various Stats</h2>
 <blockquote>
 <p>You can not only get the player&#39;s health, hunger, active potion effects, but much more! Here&#39;s just a few
 examples of how to get each part.</p>
